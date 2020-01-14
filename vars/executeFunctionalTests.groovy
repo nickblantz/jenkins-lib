@@ -1,8 +1,8 @@
 #!/usr/bin/env groovy
 
-import com.qaas.pipeline.JenkinsConfig
+import com.qaas.pipeline.BuildEnv
 
-def call(environment) {
+def call() {
 	def language = JenkinsConfig.getLanguage()
 	def envTag = JenkinsConfig.getEnvironmentType(environment)
 	def fnTags = JenkinsConfig.getEnvironmentStages(environment)

@@ -19,8 +19,8 @@ def call(repository, branch) {
 				builds["${computerName}_${executorNum}"] = {
 					// build on specified node
 					// logical error: if 2 pipelines are running at the same time, both use an agent with 
-							 // 2+ executors, and pipeline A's test job is not finished before this
-					 		 // step takes place, this will prepare the same executor twice
+					// 2+ executors, and pipeline A's test job is not finished before this
+					// step takes place, this will prepare the same executor twice
 					node(computerName) {
 						deleteDir()
 						gitClone(repository, branch)

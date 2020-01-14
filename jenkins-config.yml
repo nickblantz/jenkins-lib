@@ -1,0 +1,27 @@
+language: 'rust'
+version: '1.42.0-nightly'
+environments:
+  DEV1:
+    env_type: 'DEV'
+    test_stages: 
+     - 'Smoke'
+  DEV2:
+    env_type: 'DEV'
+    test_stages: 
+     - 'Smoke'
+  QA1:
+    env_type: 'QA'
+    test_stages: 
+     - 'Smoke'
+     - 'API'
+     - 'UI'
+  QA2:
+    env_type: 'QA'
+    test_stages: 
+     - 'Smoke'
+     - 'API'
+     - 'UI'
+  PROD:
+    env_type: 'PROD'
+    test_stages:
+      - 'Smoke'
