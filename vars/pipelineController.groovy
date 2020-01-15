@@ -16,6 +16,13 @@
 // }
 
 def call () {
+    // Required Pipeline Parameters
+    properties([parameters([
+        string(defaultValue: '', description: 'Name of the environment under test', name: 'repository_type'),
+        string(defaultValue: '', description: 'Url of the test source code repository', name: 'repository_url'),
+        string(defaultValue: '', description: 'Branch of the test source code repository', name: 'branch'),
+        string(defaultValue: '', description: 'Directory in the test source code branch', name: 'directory')
+    ])])
     println("getting called")
 }
 
