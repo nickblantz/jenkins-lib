@@ -1,0 +1,77 @@
+# Defines the default values for the required pipeline parameters
+default_parameter_values:
+  repository_type: git
+  repository_url: https://github.com/nickblantz/ExampleProject.git
+  repository_branch: master
+  path_to_instructions: .ops-central/pipelines/qa-testing.yml
+
+# Defines additional parameters for the pipeline's subsequent executions
+custom_parameters:
+  environment:
+    type: String
+    description: Environment being tested
+    default_value: QA1
+
+# Defines variables accessible during the pipeline's execution
+variables:
+  foo: bar
+
+# Defines what the pipeline will execute and the order
+steps:
+  - name: gitCheckoutStep
+    title: Checking out source code!
+    image: 
+    repository_type: git
+    repository_url: ${params.repository_url}
+    repository_branch: ${params.repository_branch} 
+
+  - name: BDDStep
+    title: "Running Cucumber Functional Tests"
+    mode: ( Parallel | Sequential )
+    environment: ${params.environment}
+    fail_fast: true
+    lazy_failure_key: cuc-test
+
+  - name: jMeterStep
+    title: "Running Jmeter Performance Tests"
+    jmeter_option: ${variables.foo}
+    lazy_failure_key: perf-test
+    
+  - name: gitCheckoutStep
+    title: Checking out custom scripts
+    repository_type: git
+    repository_url: https://github.com/nickblantz/RubyCucumberTests.git
+    sparse_checkout_directory: scripts/
+    
+  - name: batchStep
+    title: Reformatting cucumber test output
+    command: python
+    arguments:
+      - 
+  lazyFailureStep:
+    evaluate: 
+      - cuc-test
+      - perf-test
+
+# Executed after the pipeline's steps
+post:
+  always:
+    EmailNotification:
+      title: Sending emails
+      recipients: ${project.app_team_testers}
+      template:
+        name: cucumber-jmeter-custom.template
+  success:
+  unstable:
+    EmailNotification:
+      title: Sending blame emails
+      recipients: ${variables.repositories.0.committers}
+      template:
+        name: cucumber-jmeter-custom.template
+  failure:
+    EmailNotification:
+      title: Emailing DevOps Team
+      recipients: DL_DevOps@mc.com
+      template:
+        name: pipeline-devops-alert.template
+  aborted:

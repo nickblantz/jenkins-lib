@@ -1,4 +1,12 @@
 // Requires the testing library
 @Library('jenkins-lib@ops-central')_
 
+// Required parameters for the pipeline
+properties([parameters([
+    choice(name: 'repository_type', description: 'Type of the repository', choices: ['git', 'svn', 'artifactory'])
+    string(name: 'repository_url', description: 'Url of the repository' defaultValue: ''),
+    string(name: 'repository_branch', description: 'Branch of the repository', defaultValue: ''),
+    string(name: 'path_to_instructions', description: 'Path to the instructions.yml file controlling the pipeline' defaultValue: '')
+])])
+
 pipelineController()
